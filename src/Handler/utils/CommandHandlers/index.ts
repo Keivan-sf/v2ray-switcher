@@ -1,4 +1,4 @@
-import { commandsWithArgs, singleCommands } from "./commands/index.ts";
+import { commandsWithArgs, singleCommands } from "./commands";
 
 class SingleCommandHandler {
     static start() {

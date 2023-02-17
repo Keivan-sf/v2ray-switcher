@@ -5,7 +5,7 @@ import {
 import {
     commandsWithArgs,
     singleCommands,
-} from "./utils/CommandHandlers/commands/index.ts";
+} from "./utils/CommandHandlers/commands";
 import { CommandWithArgs, SingleCommand, Command } from "./utils/CommandType";
 
 class CommandHandler {
