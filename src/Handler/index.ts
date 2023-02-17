@@ -2,12 +2,20 @@ import {
     singleCommandHandlers,
     commandWithArgsHandlers,
 } from "./utils/CommandHandlers";
+import {
+    commandsWithArgs,
+    singleCommands,
+} from "./utils/CommandHandlers/commands/index.ts";
 import { CommandWithArgs, SingleCommand, Command } from "./utils/CommandType";
 
 class CommandHandler {
     static onMessage(data: Buffer) {
-        const command = CommandHandler.getExecutableCommand(data);
-        command.execute();
+        try {
+            const command = CommandHandler.getExecutableCommand(data);
+            command.execute();
+        } catch (err: any) {
+            console.log(err.message);
+        }
     }
     private static getExecutableCommand(userInput: Buffer) {
         const parsedInput = CommandHandler.parseInput(userInput);
@@ -28,10 +36,26 @@ class CommandHandler {
         }
     }
     private static getSingleCommandHandler(command: string) {
-        return singleCommandHandlers[command];
+        const validCommand = CommandHandler.validateSingleCommand(command);
+        return singleCommandHandlers[validCommand];
     }
     private static getCommandWithArgsHandler(command: string) {
-        return commandWithArgsHandlers[command];
+        const validCommand = CommandHandler.validateCommandWithArgs(command);
+        return commandWithArgsHandlers[validCommand];
+    }
+    private static validateSingleCommand(
+        command: string
+    ): typeof singleCommands[number] {
+        const validCommand: typeof singleCommands[number] = command as any;
+        if (!singleCommands.includes(validCommand))
+            throw new Error("Invalid command");
+        return validCommand;
+    }
+    private static validateCommandWithArgs(command: string) {
+        const validCommand: typeof commandsWithArgs[number] = command as any;
+        if (!commandsWithArgs.includes(validCommand))
+            throw new Error("Invalid command");
+        return validCommand;
     }
 }
 
