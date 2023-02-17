@@ -1,3 +1,7 @@
+import {
+    singleCommandHandlers,
+    commandWithArgsHandlers,
+} from "./utils/CommandHandlers";
 import { CommandWithArgs, SingleCommand, Command } from "./utils/CommandType";
 
 class CommandHandler {
@@ -15,11 +19,19 @@ class CommandHandler {
     private static convertToCommandType(userInput: string): Command {
         const args = userInput.split(" ");
         const command = args.shift()!;
-        const execute: () => void = () => {
-            console.log("test");
-        };
-        if (args.length < 1) return new SingleCommand(execute, command);
-        return new CommandWithArgs(execute, command, args);
+        if (args.length < 1) {
+            const handler = CommandHandler.getSingleCommandHandler(command);
+            return new SingleCommand(handler, command);
+        } else {
+            const handler = CommandHandler.getCommandWithArgsHandler(command);
+            return new CommandWithArgs(handler, command, args);
+        }
+    }
+    private static getSingleCommandHandler(command: string) {
+        return singleCommandHandlers[command];
+    }
+    private static getCommandWithArgsHandler(command: string) {
+        return commandWithArgsHandlers[command];
     }
 }
 
