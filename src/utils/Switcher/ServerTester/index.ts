@@ -1,5 +1,5 @@
-import { Files } from "../Files";
-import { V2rayJsonConfig } from "../SubscriptionServerExtractor/interfaces";
+import { Files } from "../../Files";
+import { V2rayJsonConfig } from "../../SubscriptionServerExtractor/interfaces";
 import treeKill from "tree-kill";
 import * as $ from "node:child_process";
 import { SocksProxyAgent } from "socks-proxy-agent";
@@ -7,12 +7,18 @@ import axios from "axios";
 
 export class ServerTester {
     private files: Files = new Files();
-    constructor(public port: number) {}
+    private status: "connected" | "disconnected" = "disconnected";
+    constructor(
+        public core_file_path: string, // /v2ray-core/v2ray
+        public port: number,
+        private failedCallBack: (tester: ServerTester) => any,
+        private connectedCallBack: (tester: ServerTester) => any,
+    ) {}
     public async run(config: V2rayJsonConfig) {
         this.setPortToConfig(config);
         const cmd = await this.createV2rayProcess(config);
         await this.waitForV2rayToStart(cmd);
-        await this.test(cmd.pid);
+        await this.startTesting(cmd.pid);
     }
 
     private async createV2rayProcess(config: V2rayJsonConfig) {
@@ -20,7 +26,7 @@ export class ServerTester {
             `${this.port}`,
             config
         );
-        const command = `${__dirname}/v2ray-core/v2ray run --config=${config_path}`;
+        const command = `${this.core_file_path} run --config=${config_path}`;
         return $.spawn(command, { shell: true });
     }
 
@@ -33,7 +39,6 @@ export class ServerTester {
                 try {
                     console.log("Server started");
                     resolve();
-                    // if (cmd.pid) treeKill(cmd.pid);
                 } catch (err) {
                     console.log(err);
                 }
@@ -59,20 +64,36 @@ export class ServerTester {
         ];
     }
 
-    private async test(pid?: number) {
+    private async startTesting(pid?: number) {
+        const result = await this.test(pid);
+        if (result === "FAILED") {
+            this.status = "disconnected";
+            this.failedCallBack(this);
+            return;
+        }
+        if (this.status === "disconnected") {
+            this.status = "connected";
+            this.connectedCallBack(this);
+        }
+        setTimeout(() => this.startTesting(pid), 4 * 1000);
+    }
+
+    private async test(pid?: number): Promise<"SUCCEED" | "FAILED"> {
         try {
             const PROXY = `socks5://localhost:${this.port}`;
+            // const PROXY = `socks5://localhost:${2080}`;
             const httpsAgent = new SocksProxyAgent(PROXY);
             const client = axios.create({
                 httpsAgent,
                 baseURL: "https://api.ipify.org",
-                timeout: 15000,
+                timeout: 10000,
             });
             const data = (await client.get("/")).data;
             console.log(`test data:`, data);
+            return "SUCCEED";
         } catch (err) {
-            console.log("acios error actually here::: >>>", err);
             if (pid) treeKill(pid);
+            return "FAILED";
         }
     }
 }
