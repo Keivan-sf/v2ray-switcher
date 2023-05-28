@@ -1,6 +1,6 @@
 import axios from "axios";
 import { VmessURI } from "./URITypes/vmess";
-import { ConfigURI } from "../interfaces";
+import { ConfigURI } from "../../../interfaces";
 
 export class URIExtractor {
     async extractServersFromSubLink(link: string): Promise<ConfigURI[]> {

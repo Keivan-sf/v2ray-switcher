@@ -1,5 +1,5 @@
 import { Files } from "../../Files";
-import { V2rayJsonConfig } from "../../SubscriptionServerExtractor/interfaces";
+import { V2rayJsonConfig} from "../../interfaces"
 import treeKill from "tree-kill";
 import * as $ from "node:child_process";
 import { SocksProxyAgent } from "socks-proxy-agent";

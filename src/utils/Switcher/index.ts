@@ -1,11 +1,9 @@
-import { V2rayJsonConfig } from "../SubscriptionServerExtractor/interfaces";
+import { ConfigExtractor } from "../SubscriptionServerExtractor";
+import { V2rayJsonConfig } from "../interfaces";
 import { ServerTester } from "./ServerTester";
 
 export class Switcher {
-    constructor(public configs: V2rayJsonConfig[]) {}
-    updateConfigs(configs: V2rayJsonConfig[]) {
-
-    }
+    constructor(public extractor: ConfigExtractor) {}
     async start() {
         const fail = (server: ServerTester) => {
             console.log(`the server failed:`, server.port);
@@ -20,6 +18,6 @@ export class Switcher {
             fail,
             success
         );
-        await tester.run(this.configs[0]);
+        await tester.run(this.extractor.get());
     }
 }
