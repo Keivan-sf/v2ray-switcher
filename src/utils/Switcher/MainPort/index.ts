@@ -129,14 +129,9 @@ export class MainPort {
         new Promise<void>((resolve) => {
             cmd.stdout.on("data", async (data: Buffer) => {
                 const out = data.toString();
-                console.log(out);
                 if (!out.includes("started")) return;
-                try {
-                    console.log("Server started");
-                    resolve();
-                } catch (err) {
-                    console.log(err);
-                }
+                console.log("Main port started");
+                resolve();
             });
         });
 }

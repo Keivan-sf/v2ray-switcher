@@ -36,7 +36,6 @@ export class ServerTester {
                 const out = data.toString();
                 if (!out.includes("started")) return;
                 try {
-                    console.log("Server started");
                     resolve();
                 } catch (err) {
                     console.log(err);
