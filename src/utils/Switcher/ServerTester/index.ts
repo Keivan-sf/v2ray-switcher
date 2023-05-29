@@ -1,5 +1,5 @@
 import { Files } from "../../Files";
-import { V2rayJsonConfig} from "../../interfaces"
+import { V2rayJsonConfig } from "../../interfaces";
 import treeKill from "tree-kill";
 import * as $ from "node:child_process";
 import { SocksProxyAgent } from "socks-proxy-agent";
@@ -12,7 +12,7 @@ export class ServerTester {
         public core_file_path: string, // /v2ray-core/v2ray
         public port: number,
         private failedCallBack: (tester: ServerTester) => any,
-        private connectedCallBack: (tester: ServerTester) => any,
+        private connectedCallBack: (tester: ServerTester) => any
     ) {}
     public async run(config: V2rayJsonConfig) {
         this.setPortToConfig(config);

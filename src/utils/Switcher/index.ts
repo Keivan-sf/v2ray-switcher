@@ -1,23 +1,68 @@
+import { read } from "fs";
 import { ConfigExtractor } from "../SubscriptionServerExtractor";
 import { V2rayJsonConfig } from "../interfaces";
+import { MainPort } from "./MainPort";
 import { ServerTester } from "./ServerTester";
 
 export class Switcher {
-    constructor(public extractor: ConfigExtractor) {}
+    private main_port = new MainPort(
+        __dirname + "/v2ray-core/v2ray",
+        4080,
+        4081
+    );
+    private ready_testers: ServerTester[] = [];
+    private connected_testers: ServerTester[] = [];
+    constructor(public extractor: ConfigExtractor) {
+        for (let i = 4075; i < 4080; i++) {
+            this.ready_testers.push(
+                new ServerTester(
+                    __dirname + "/v2ray-core/v2ray",
+                    i,
+                    this.fail,
+                    this.success
+                )
+            );
+        }
+    }
     async start() {
-        const fail = (server: ServerTester) => {
-            console.log(`the server failed:`, server.port);
-        };
+        for (let tester of this.ready_testers) {
+            tester.run(this.extractor.get());
+        }
+    }
+    private fail(tester: ServerTester) {
+        console.log(`the server failed:`, tester.port);
 
-        const success = (server: ServerTester) => {
-            console.log("the server succeeded", server.port);
-        };
-        const tester = new ServerTester(
-            __dirname + "/v2ray-core/v2ray",
-            4080,
-            fail,
-            success
+        this.moveFromConnectedToReady(tester);
+        tester.run(this.extractor.get());
+
+        if (tester.port !== this.main_port.current_port) return;
+        if (this.connected_testers.length < 1) {
+            this.main_port.connected = false;
+        } else {
+            this.main_port.run(this.connected_testers[0].port);
+        }
+    }
+    private success(tester: ServerTester) {
+        console.log("the server succeeded", tester.port);
+
+        this.moveFromReadyToConnected(tester);
+        if (this.main_port.connected) return;
+        this.main_port.run(tester.port);
+    }
+
+    private moveFromReadyToConnected(tester: ServerTester) {
+        this.ready_testers = this.ready_testers.filter(
+            (t) => tester.port !== t.port
         );
-        await tester.run(this.extractor.get());
+        if (this.connected_testers.some((t) => tester.port === t.port)) return;
+        this.connected_testers.push(tester);
+    }
+
+    private moveFromConnectedToReady(tester: ServerTester) {
+        this.connected_testers = this.connected_testers.filter(
+            (t) => tester.port !== t.port
+        );
+        if (this.ready_testers.some((t) => tester.port === t.port)) return;
+        this.ready_testers.push(tester);
     }
 }
