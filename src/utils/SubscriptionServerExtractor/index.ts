@@ -2,21 +2,31 @@ import { V2rayJsonConfig } from "../interfaces";
 import { Subscription } from "./Subscription";
 
 export class ConfigExtractor {
-    private unused_configs: V2rayJsonConfig[] = [];
-    constructor(private sub_links: string[]) {}
-    public async init() {
+    private configs: V2rayJsonConfig[] = [];
+    private first_run: boolean = true;
+    constructor(private sub_links: string[], private delay: number) {}
+    public async startExtracting() {
         const promises = [];
         for (const link of this.sub_links) {
             promises.push(new Subscription(link).getJsonConfigs());
         }
         const subscriptions_configs = await Promise.all(promises);
+        const configs = [];
         for (const sub_config of subscriptions_configs) {
-            this.unused_configs.push(...sub_config);
+            configs.push(...sub_config);
         }
-        if (this.unused_configs.length === 0)
-            throw new Error("No servers found in subscription links!");
+        if (configs.length === 0) {
+            if (this.first_run)
+                throw new Error("No servers found in subscription links!");
+            console.log("No servers found in subscription links!");
+            return;
+        }
+        this.configs.push(...configs);
+        setTimeout(() => this.startExtracting, this.delay);
     }
     public get() {
-        return this.unused_configs.shift() as V2rayJsonConfig;
+        const server = this.configs.shift() as V2rayJsonConfig;
+        this.configs.push(server);
+        return server;
     }
 }
