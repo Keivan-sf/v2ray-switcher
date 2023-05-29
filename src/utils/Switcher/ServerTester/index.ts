@@ -4,6 +4,7 @@ import treeKill from "tree-kill";
 import * as $ from "node:child_process";
 import { SocksProxyAgent } from "socks-proxy-agent";
 import axios from "axios";
+import { Switcher } from "..";
 
 export class ServerTester {
     private files: Files = new Files();
@@ -11,8 +12,7 @@ export class ServerTester {
     constructor(
         public core_file_path: string, // /v2ray-core/v2ray
         public port: number,
-        private failedCallBack: (tester: ServerTester) => any,
-        private connectedCallBack: (tester: ServerTester) => any
+        private switcher: Switcher
     ) {}
     public async run(config: V2rayJsonConfig) {
         this.setPortToConfig(config);
@@ -34,7 +34,6 @@ export class ServerTester {
         new Promise<void>((resolve) => {
             cmd.stdout.on("data", async (data: Buffer) => {
                 const out = data.toString();
-                console.log(out);
                 if (!out.includes("started")) return;
                 try {
                     console.log("Server started");
@@ -68,14 +67,14 @@ export class ServerTester {
         const result = await this.test(pid);
         if (result === "FAILED") {
             this.status = "disconnected";
-            this.failedCallBack(this);
+            this.switcher.fail(this);
             return;
         }
         if (this.status === "disconnected") {
             this.status = "connected";
-            this.connectedCallBack(this);
+            this.switcher.success(this);
         }
-        setTimeout(() => this.startTesting(pid), 4 * 1000);
+        setTimeout(() => this.startTesting(pid), 1 * 60 * 1000);
     }
 
     private async test(pid?: number): Promise<"SUCCEED" | "FAILED"> {

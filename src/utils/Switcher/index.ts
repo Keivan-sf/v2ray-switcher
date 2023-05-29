@@ -18,8 +18,7 @@ export class Switcher {
                 new ServerTester(
                     __dirname + "/v2ray-core/v2ray",
                     i,
-                    this.fail,
-                    this.success
+                    this
                 )
             );
         }
@@ -29,7 +28,7 @@ export class Switcher {
             tester.run(this.extractor.get());
         }
     }
-    private fail(tester: ServerTester) {
+    public fail(tester: ServerTester) {
         console.log(`the server failed:`, tester.port);
 
         this.moveFromConnectedToReady(tester);
@@ -42,7 +41,7 @@ export class Switcher {
             this.main_port.run(this.connected_testers[0].port);
         }
     }
-    private success(tester: ServerTester) {
+    public success(tester: ServerTester) {
         console.log("the server succeeded", tester.port);
 
         this.moveFromReadyToConnected(tester);
