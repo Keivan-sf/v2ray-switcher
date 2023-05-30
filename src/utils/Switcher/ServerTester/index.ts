@@ -73,7 +73,7 @@ export class ServerTester {
             this.status = "connected";
             this.switcher.success(this);
         }
-        setTimeout(() => this.startTesting(pid), 1 * 60 * 1000);
+        setTimeout(() => this.startTesting(pid), 30 * 1000);
     }
 
     private async test(pid?: number): Promise<"SUCCEED" | "FAILED"> {
@@ -83,7 +83,7 @@ export class ServerTester {
             const httpsAgent = new SocksProxyAgent(PROXY);
             const client = axios.create({
                 httpsAgent,
-                baseURL: "https://api.ipify.org",
+                baseURL: "https://dns.google.com/resolve?name=google.com",
                 timeout: 10000,
             });
             const data = (await client.get("/")).data;
