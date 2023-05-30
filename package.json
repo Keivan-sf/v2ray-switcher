@@ -4,10 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node .dist/index.js",
-        "test": "npx jest",
-        "start:dev": "ts-node src/index.ts",
-        "build": "npx tsc"
+        "start": "ts-node src/index.ts",
+        "test": "npx jest"
     },
     "repository": {
         "type": "git",
