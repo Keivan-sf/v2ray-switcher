@@ -86,8 +86,7 @@ export class ServerTester {
                 baseURL: "https://dns.google.com/resolve?name=google.com",
                 timeout: 10000,
             });
-            const data = (await client.get("/")).data;
-            console.log(`test data:`, data);
+            await client.get("/");
             return "SUCCEED";
         } catch (err) {
             if (pid) treeKill(pid);
