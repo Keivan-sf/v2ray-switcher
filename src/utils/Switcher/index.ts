@@ -13,11 +13,7 @@ export class Switcher {
     constructor(public extractor: ConfigExtractor) {
         for (let i = 4075; i < 4080; i++) {
             this.ready_testers.push(
-                new ServerTester(
-                    __dirname + "/v2ray-core/v2ray",
-                    i,
-                    this
-                )
+                new ServerTester(__dirname + "/v2ray-core/v2ray", i, this)
             );
         }
     }
@@ -27,8 +23,9 @@ export class Switcher {
         }
     }
     public fail(tester: ServerTester) {
-        console.log(`the server failed:`, tester.port);
-
+        console.log(
+            `the tester failed on port ${tester.port} , trying another server`
+        );
         this.moveFromConnectedToReady(tester);
         tester.run(this.extractor.get());
 
@@ -40,7 +37,7 @@ export class Switcher {
         }
     }
     public success(tester: ServerTester) {
-        console.log("the server succeeded", tester.port);
+        console.log("the tester succeeded on port ", tester.port);
 
         this.moveFromReadyToConnected(tester);
         if (this.main_port.connected) return;
