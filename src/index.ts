@@ -1,6 +1,4 @@
 import { Files } from "./utils/Files";
-import { Subscription } from "./utils/SubscriptionServerExtractor/Subscription";
-import { V2rayJsonConfig } from "./utils/interfaces";
 import { Switcher } from "./utils/Switcher";
 import { ConfigExtractor } from "./utils/SubscriptionServerExtractor";
 
@@ -11,7 +9,6 @@ async function start() {
     await extractor.startExtracting();
     const switcher = new Switcher(extractor);
     switcher.start();
-    // console.dir(configs, { depth: 10 });
 }
 
 start();

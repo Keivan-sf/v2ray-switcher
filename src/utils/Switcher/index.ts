@@ -1,6 +1,4 @@
-import { read } from "fs";
 import { ConfigExtractor } from "../SubscriptionServerExtractor";
-import { V2rayJsonConfig } from "../interfaces";
 import { MainPort } from "./MainPort";
 import { ServerTester } from "./ServerTester";
 
