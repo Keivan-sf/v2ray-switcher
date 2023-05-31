@@ -24,7 +24,9 @@ export class Switcher {
     }
     public fail(tester: ServerTester) {
         console.log(
-            `the tester failed on port ${tester.port} , trying another server`
+            "Tester failed on port",
+            tester.port,
+            "trying another server"
         );
         this.moveFromConnectedToReady(tester);
         tester.run(this.extractor.get());
@@ -37,7 +39,7 @@ export class Switcher {
         }
     }
     public success(tester: ServerTester) {
-        console.log("the tester succeeded on port ", tester.port);
+        console.log("Tester succeeded on port", tester.port);
 
         this.moveFromReadyToConnected(tester);
         if (this.main_port.connected) return;

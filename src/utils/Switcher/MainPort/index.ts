@@ -132,7 +132,7 @@ export class MainPort {
                 const out = data.toString();
                 if (!out.includes("started")) return;
                 console.log(
-                    "Main port is now pointing to: ",
+                    "Main port is now pointing to:",
                     this.current_port
                 );
                 resolve();

@@ -79,7 +79,6 @@ export class ServerTester {
     private async test(pid?: number): Promise<"SUCCEED" | "FAILED"> {
         try {
             const PROXY = `socks5://localhost:${this.port}`;
-            // const PROXY = `socks5://localhost:${2080}`;
             const httpsAgent = new SocksProxyAgent(PROXY);
             const client = axios.create({
                 httpsAgent,
