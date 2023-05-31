@@ -21,7 +21,10 @@ export class ConfigExtractor {
             console.log("No servers found in subscription links!");
             return;
         }
-        this.configs.push(...configs);
+        const length = this.configs.unshift(...configs);
+        if (length >= 100) {
+            this.configs = this.configs.slice(0, 100);
+        }
         setTimeout(() => this.startExtracting, this.delay);
     }
     public get() {

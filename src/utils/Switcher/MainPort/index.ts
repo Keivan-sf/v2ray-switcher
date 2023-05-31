@@ -103,7 +103,7 @@ export class MainPort {
         this.config.inbounds[1].port = http_port;
     }
     public async run(port: number) {
-        console.log("Main port starting pointing to: " + port);
+        console.log("Main port starting to point to: " + port);
         this.current_port = port;
         if (this.current_pid) treeKill(this.current_pid);
         this.connected = true;
@@ -132,7 +132,7 @@ export class MainPort {
             cmd.stdout.on("data", async (data: Buffer) => {
                 const out = data.toString();
                 if (!out.includes("started")) return;
-                console.log("Main port started");
+                console.log("Main port started running on 4080");
                 resolve();
             });
         });
