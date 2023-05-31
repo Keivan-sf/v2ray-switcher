@@ -7,5 +7,6 @@ A simple app to get v2ray servers from a list of subscriptions, and always expos
 ## To use:
 
  1. Create a `subscriptions.txt` file at root directory of project, and add your subscription links into it (one line each)
- 2. Run `npm i && npm start`
- 3. A socks5 proxy will be exposed at `4080` once a good connection is established
+ 2. Make sure to create an empty folder called `.configs` in `./src/utils/Files`
+ 3. Run `npm i && npm start`
+ 4. A socks5 proxy will be exposed at `4080` once a good connection is established
