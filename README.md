@@ -1,7 +1,7 @@
 # v2ray-switcher
 A simple app to get v2ray servers from a list of subscriptions, and always expose a good one at `4080` as a socks5 proxy.
 
-#### The app is still user development
+#### The app is still under development
 - The app currently only works in linux-x64 systems
 
 ## To use:
