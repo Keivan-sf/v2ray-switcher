@@ -103,7 +103,8 @@ export class MainPort {
         this.config.inbounds[1].port = http_port;
     }
     public async run(port: number) {
-        console.log("Main port starting pointing to" + port);
+        console.log("Main port starting pointing to: " + port);
+        this.current_port = port;
         if (this.current_pid) treeKill(this.current_pid);
         this.connected = true;
         this.setOutboundPort(port);
