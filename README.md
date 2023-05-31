@@ -1,12 +1,12 @@
 # v2ray-switcher
 A simple app to get v2ray servers from a list of subscriptions, and always expose a good one at `4080` as a socks5 proxy.
-
-#### The app is still under development
-- The app currently only works in linux-x64 systems
+#### The app currently only works in linux-x64 systems
 
 ## To use:
-
- 1. Create a `subscriptions.txt` file at root directory of project, and add your subscription links into it (one line each)
- 2. Make sure to create an empty folder called `.configs` in `./src/utils/Files`
- 3. Run `npm i && npm start`
- 4. A socks5 proxy will be exposed at `4080` once a good connection is established
+ 1. Run `npm i && npm build`
+ 2. Add your subscription links into `subscriptions.txt` (one line each)
+ 3. Run `npm start`
+ 
+  A socks5 proxy will be exposed at `4080` once a good connection is established
+## Supported formats
+- vmess
