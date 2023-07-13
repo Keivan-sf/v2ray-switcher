@@ -1,6 +1,6 @@
 import { vmess_uri_config, ConfigURI, V2rayJsonConfig } from "../../../../interfaces";
 
-const example = {
+const example: V2rayJsonConfig = {
     dns: {
         hosts: {
             "domain:googleapis.cn": "googleapis.com",

@@ -41,6 +41,9 @@ export interface V2rayJsonConfig {
                     security: string;
                 }[];
             }[];
+            response?: {
+                type: "http";
+            };
         };
         streamSettings?: {
             network?: string;
