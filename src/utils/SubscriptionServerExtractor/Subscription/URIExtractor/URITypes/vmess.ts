@@ -1,4 +1,8 @@
-import { vmess_uri_config, ConfigURI, V2rayJsonConfig } from "../../../../interfaces";
+import {
+    vmess_uri_config,
+    ConfigURI,
+    V2rayJsonConfig,
+} from "../../../../interfaces";
 
 const example: V2rayJsonConfig = {
     dns: {

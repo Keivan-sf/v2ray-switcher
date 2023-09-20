@@ -100,17 +100,17 @@ export class MainPort {
         private core_file_path: string,
         public socks5_port: number,
         public http_port: number,
-        socks_credintials?: {user: string, password: string}
+        socks_credintials?: { user: string; password: string }
     ) {
         this.config.inbounds[0].port = socks5_port;
         this.config.inbounds[1].port = http_port;
         if (socks_credintials) {
-            this.config.inbounds[0].settings.auth = 'password';
+            this.config.inbounds[0].settings.auth = "password";
             this.config.inbounds[0].settings.accounts = [
                 {
                     user: socks_credintials.user,
                     pass: socks_credintials.password,
-                }
+                },
             ];
         }
     }
@@ -143,10 +143,7 @@ export class MainPort {
             cmd.stdout.on("data", async (data: Buffer) => {
                 const out = data.toString();
                 if (!out.includes("started")) return;
-                console.log(
-                    "Main port is now pointing to:",
-                    this.current_port
-                );
+                console.log("Main port is now pointing to:", this.current_port);
                 resolve();
             });
         });

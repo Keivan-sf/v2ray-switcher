@@ -19,7 +19,9 @@ export class ConfigExtractor {
         if (configs.length === 0) {
             if (this.first_run)
                 throw new Error("No servers found in subscription links!");
-            console.log("No servers found in subscription links! Sticking with the old ones");
+            console.log(
+                "No servers found in subscription links! Sticking with the old ones"
+            );
             return;
         }
         const length = this.configs.unshift(...configs);
