@@ -1,7 +1,9 @@
 import treeKill from "tree-kill";
 import { Files } from "../../Files";
 import * as $ from "node:child_process";
-const socks5_config = {
+import { V2rayJsonConfig } from "../../interfaces";
+
+const socks5_config: V2rayJsonConfig = {
     dns: {
         hosts: {
             "domain:googleapis.cn": "googleapis.com",
@@ -97,10 +99,20 @@ export class MainPort {
     constructor(
         private core_file_path: string,
         public socks5_port: number,
-        public http_port: number
+        public http_port: number,
+        socks_credintials?: {user: string, password: string}
     ) {
         this.config.inbounds[0].port = socks5_port;
         this.config.inbounds[1].port = http_port;
+        if (socks_credintials) {
+            this.config.inbounds[0].settings.auth = 'password';
+            this.config.inbounds[0].settings.accounts = [
+                {
+                    user: socks_credintials.user,
+                    pass: socks_credintials.password,
+                }
+            ];
+        }
     }
     public async run(port: number) {
         this.current_port = port;

@@ -12,6 +12,7 @@ export interface V2rayJsonConfig {
             auth?: string;
             udp?: boolean;
             userLevel?: number;
+            accounts?: {user: string, pass: string}[];
         };
         sniffing?: {
             destOverride?: string[];
@@ -44,6 +45,7 @@ export interface V2rayJsonConfig {
             response?: {
                 type: "http";
             };
+            servers?: any[];
         };
         streamSettings?: {
             network?: string;
