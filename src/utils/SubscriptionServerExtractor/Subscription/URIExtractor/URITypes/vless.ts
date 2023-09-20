@@ -106,7 +106,7 @@ const a: V2rayJsonConfig = {
     stats: {},
 };
 
-class VlessURI extends ConfigURI 
+// class VlessURI extends  {}
 
 
 // vless://3579bddf-ec56-429e-9515-dd252379d988@abrarv.emadagha.online:30185?security=&type=ws&path=/#kingkia-nbr6aer4

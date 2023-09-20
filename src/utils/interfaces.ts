@@ -4,14 +4,15 @@ export interface V2rayJsonConfig {
         hosts?: {
             [key in string]: string;
         };
-        servers?:
+        servers?: (
             | string
             | {
                   address?: string;
                   domains?: string[];
                   fallbackStrategy?: string;
                   queryStrategy?: string;
-              }[];
+              }
+        )[];
         tag?: string;
     };
     inbounds: {
@@ -36,13 +37,18 @@ export interface V2rayJsonConfig {
         loglevel: string;
     };
     outbounds: {
-        domainStrategy: string;
+        domainStrategy?: string;
         mux?: {
             concurrency?: number;
             enabled?: boolean;
         };
         protocol?: string;
+        proxySettings?: { tag?: string; transportLayer?: boolean };
         settings?: {
+            address?: string;
+            network?: string;
+            port?: number;
+            userLevel?: number;
             vnext?: {
                 address?: string;
                 port?: number;
@@ -76,12 +82,21 @@ export interface V2rayJsonConfig {
         domainMatcher: string;
         domainStrategy: string;
         rules: {
-            ip: string[];
-            outboundTag: string;
-            port: string;
-            type: string;
+            ip?: string[];
+            outboundTag?: string;
+            inboundTag?: string[];
+            port?: string;
+            type?: string;
         }[];
     };
+    policy?: {
+        levels?: { [k in string]: Object };
+        system?: {
+            statsOutboundDownlink?: boolean;
+            statsOutboundUplink?: boolean;
+        };
+    };
+    stats?: {};
 }
 
 export type vmess_uri_config = {

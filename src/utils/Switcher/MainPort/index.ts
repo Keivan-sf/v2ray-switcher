@@ -105,8 +105,8 @@ export class MainPort {
         this.config.inbounds[0].port = socks5_port;
         this.config.inbounds[1].port = http_port;
         if (socks_credintials) {
-            this.config.inbounds[0].settings.auth = "password";
-            this.config.inbounds[0].settings.accounts = [
+            this.config.inbounds[0].settings!.auth = "password";
+            this.config.inbounds[0].settings!.accounts = [
                 {
                     user: socks_credintials.user,
                     pass: socks_credintials.password,
@@ -135,7 +135,7 @@ export class MainPort {
     }
 
     private setOutboundPort(port: number) {
-        this.config.outbounds[0].settings.servers![0].port = port;
+        this.config.outbounds[0].settings!.servers![0].port = port;
     }
 
     private waitForV2rayToStart = (cmd: $.ChildProcessWithoutNullStreams) =>
