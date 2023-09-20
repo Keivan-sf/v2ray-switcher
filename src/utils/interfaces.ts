@@ -1,14 +1,24 @@
 export interface V2rayJsonConfig {
     dns: {
-        hosts: {
+        fallbackStrategy?: string;
+        hosts?: {
             [key in string]: string;
         };
-        servers: string[];
+        servers?:
+            | string
+            | {
+                  address?: string;
+                  domains?: string[];
+                  fallbackStrategy?: string;
+                  queryStrategy?: string;
+              }[];
+        tag?: string;
     };
     inbounds: {
-        port: number;
-        protocol: string;
-        settings: {
+        port?: number;
+        listen?: string;
+        protocol?: string;
+        settings?: {
             auth?: string;
             udp?: boolean;
             userLevel?: number;
@@ -17,29 +27,32 @@ export interface V2rayJsonConfig {
         sniffing?: {
             destOverride?: string[];
             enabled?: boolean;
+            metadataOnly?: boolean;
+            routeOnly?: boolean;
         };
-        tag: string;
+        tag?: string;
     }[];
     log: {
         loglevel: string;
     };
     outbounds: {
+        domainStrategy: string;
         mux?: {
             concurrency?: number;
             enabled?: boolean;
         };
-        protocol: string;
-        settings: {
+        protocol?: string;
+        settings?: {
             vnext?: {
-                address: string;
-                port: number;
-                users: {
-                    alterId: number;
-                    encryption: string;
-                    flow: string;
-                    id: string;
-                    level: number;
-                    security: string;
+                address?: string;
+                port?: number;
+                users?: {
+                    alterId?: number;
+                    encryption?: string;
+                    flow?: string;
+                    id?: string;
+                    level?: number;
+                    security?: string;
                 }[];
             }[];
             response?: {
