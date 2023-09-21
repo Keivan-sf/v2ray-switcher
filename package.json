@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "npx ts-node -r dotenv/config src/index.ts",
-        "build": "npx ts-node scripts/build",
+        "build": "npx ts-node scripts/build.ts",
         "test": "npx jest"
     },
     "repository": {
