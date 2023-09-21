@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VmessURI } from "./URITypes/vmess";
+import { VmessURI } from "./URITypes/Vmess";
 import { ConfigURI } from "../../../interfaces";
 
 export class URIExtractor {

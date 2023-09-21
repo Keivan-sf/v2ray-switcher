@@ -1,6 +1,6 @@
-import { Files } from "./utils/Files";
-import { Switcher } from "./utils/Switcher";
-import { ConfigExtractor } from "./utils/SubscriptionServerExtractor";
+import { Files } from "./lib/Files";
+import { Switcher } from "./lib/Switcher";
+import { ConfigExtractor } from "./lib/SubscriptionServerExtractor";
 
 async function start() {
     const files = new Files();

@@ -1,9 +1,6 @@
-import {
-    ConfigURI,
-    V2rayJsonConfig,
-} from "../../../../interfaces";
+import { ConfigURI, V2rayJsonConfig } from "../../../../../interfaces";
 
-const a: V2rayJsonConfig = {
+const sample_config: V2rayJsonConfig = {
     dns: {
         fallbackStrategy: "disabled_if_any_match",
         servers: [
@@ -17,7 +14,6 @@ const a: V2rayJsonConfig = {
                 domains: ["full:..online"],
                 fallbackStrategy: "disabled",
                 queryStrategy: "",
-
             },
         ],
         tag: "dns",
@@ -106,7 +102,20 @@ const a: V2rayJsonConfig = {
     stats: {},
 };
 
-// class VlessURI extends  {}
+class VlessURI implements ConfigURI {
+    constructor(public uri: string) {}
+    convertToJson(): V2rayJsonConfig {
+        const config = {
+            ...sample_config,
+        };
+        return null as any;
+    }
+    exctractInfoFromURI() {
+        const without_protocol = this.uri.split("vless://")[1];
+        const secret = without_protocol.split("@")[0];
+        const host = without_protocol.split("@")[1].split(":")[0];
+        const port = without_protocol.split(":")[1].split("?")[0];
+        const queries = without_protocol.split("?")[1];
+    }
+}
 
-
-// vless://3579bddf-ec56-429e-9515-dd252379d988@abrarv.emadagha.online:30185?security=&type=ws&path=/#kingkia-nbr6aer4
