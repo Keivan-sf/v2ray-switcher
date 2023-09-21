@@ -10,7 +10,7 @@ async function start() {
     const switcher = new Switcher(extractor);
     switcher.start();
     console.log(
-        "\nThe process is started, connect to `socks5://127.0.0.1:4080`\n"
+        "\nThe process is started, connect to port 4080\n"
     );
 }
 
