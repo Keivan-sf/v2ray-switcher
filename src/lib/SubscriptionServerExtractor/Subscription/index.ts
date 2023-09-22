@@ -3,12 +3,16 @@ import { ConfigURI, V2rayJsonConfig } from "../../interfaces";
 export class Subscription {
     private jsonConfigs: V2rayJsonConfig[] | undefined;
     private uriExtractor: URIExtractor = new URIExtractor();
-    constructor(public subscription_url: string) {}
+    constructor(
+        public subscription_url: string,
+        public type: "file_path" | "url"
+    ) {}
     async getJsonConfigs() {
         try {
             if (this.jsonConfigs) return this.jsonConfigs;
             const servers = await this.uriExtractor.extractServersFromSubLink(
-                this.subscription_url
+                this.subscription_url,
+                this.type
             );
             this.jsonConfigs = this.convertURIArrayToJsonArray(servers);
             return this.jsonConfigs;

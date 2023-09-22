@@ -2,4 +2,5 @@
 node_modules
 .dist
 subscriptions.txt
+servers.txt
 .configs

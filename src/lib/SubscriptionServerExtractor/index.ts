@@ -1,5 +1,6 @@
 import { V2rayJsonConfig } from "../interfaces";
 import { Subscription } from "./Subscription";
+import { getRootDir } from "../../utils/dirname";
 
 export class ConfigExtractor {
     private configs: V2rayJsonConfig[] = [];
@@ -9,8 +10,9 @@ export class ConfigExtractor {
         console.log("Updating subscriptions...");
         const promises = [];
         for (const link of this.sub_links) {
-            promises.push(new Subscription(link).getJsonConfigs());
+            promises.push(new Subscription(link , "url").getJsonConfigs());
         }
+        promises.push(new Subscription(getRootDir() + "/servers.txt" , "file_path").getJsonConfigs());
         const subscriptions_configs = await Promise.all(promises);
         const configs = [];
         for (const sub_config of subscriptions_configs) {

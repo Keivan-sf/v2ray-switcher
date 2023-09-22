@@ -2,18 +2,20 @@ import axios from "axios";
 import { VmessURI } from "./URITypes/Vmess";
 import { VlessURI } from "./URITypes/Vless";
 import { ConfigURI } from "../../../interfaces";
+import fs from 'fs/promises';
 
 export class URIExtractor {
-    async extractServersFromSubLink(link: string): Promise<ConfigURI[]> {
-        const source_code = await this.getSourceCode(link);
-        const servers = source_code
-            .split("\n")
-            .reduce((acc , l) => {
-                if(!l) return acc;
-                if(l.startsWith("vmess://")) acc.push(new VmessURI(l))
-                if(l.startsWith("vless://")) acc.push(new VlessURI(l))
-                return acc;
-            }, [] as ConfigURI[])
+    async extractServersFromSubLink(
+        link: string,
+        type: "file_path" | "url"
+    ): Promise<ConfigURI[]> {
+        const source_code = type === "url" ? await this.getSourceCode(link) : await this.getFileContect(link) ;
+        const servers = source_code.split("\n").reduce((acc, l) => {
+            if (!l) return acc;
+            if (l.startsWith("vmess://")) acc.push(new VmessURI(l));
+            if (l.startsWith("vless://")) acc.push(new VlessURI(l));
+            return acc;
+        }, [] as ConfigURI[]);
         return servers;
     }
     private async getSourceCode(url: string) {
@@ -24,5 +26,9 @@ export class URIExtractor {
         } else {
             return Buffer.from(raw_source_code).toString();
         }
+    }
+    private async getFileContect(file_path: string) {
+        const raw_data = await fs.readFile(file_path);
+        return raw_data.toString();
     }
 }
