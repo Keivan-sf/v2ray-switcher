@@ -9,7 +9,7 @@ export class ConfigExtractor {
         console.log("Updating subscriptions...");
         const promises = [];
         for (const link of this.sub_links) {
-            promises.push(new Subscription(link).getJsonConfigs());
+            promises.push(new Subscription(link , "url").getJsonConfigs());
         }
         const subscriptions_configs = await Promise.all(promises);
         const configs = [];
