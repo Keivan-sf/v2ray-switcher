@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import axios from "axios";
-import { Readable } from "stream";
+import shelljs from "shelljs";
+import AdmZip from "adm-zip";
 
 const DOWNLOAD_LINKS: { [k in string]: string } = {
     "Linux-x64":
@@ -19,29 +20,26 @@ function generateEssentialDirectories() {
     if (!fs.existsSync(servers_file)) fs.writeFileSync(servers_file, "");
 }
 
-async function downloadV2rayBinaries() {
+async function installV2rayBinaries() {
     const download_url = DOWNLOAD_LINKS[os.type() + "-" + os.arch()];
     if (!download_url) {
         console.log("os and arch not supported: ", os.type() + "-" + os.arch());
         process.exit(0);
     }
-    await new Promise(async (resolve) => {
-        const readable_data = (
-            await axios({
-                url: download_url,
-                responseType: "stream",
-            })
-        ).data as Readable;
-        readable_data.pipe(fs.createWriteStream("./v2ray-binary.zip"));
-        readable_data.once("end", () => {
-            resolve(null);
-        });
-    });
+    const v2ray_zip_buffer: Buffer = (
+        await axios({
+            url: download_url,
+            responseType: "arraybuffer",
+        })
+    ).data;
+    const zip = new AdmZip(v2ray_zip_buffer);
+    zip.extractAllTo("./v2ray-core", true);
+    shelljs.chmod("+x", "./v2ray-core/v2ray");
 }
 
 async function start() {
     generateEssentialDirectories();
-    await downloadV2rayBinaries();
+    await installV2rayBinaries();
     console.log("Build finished successfully");
 }
 
