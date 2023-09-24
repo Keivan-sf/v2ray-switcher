@@ -38,8 +38,12 @@ async function installV2rayBinaries() {
 }
 
 async function start() {
+    console.log("Generating essential files and directories...");
     generateEssentialDirectories();
+    console.log("Finished");
+    console.log("Installing v2ray binaries...");
     await installV2rayBinaries();
+    console.log("Finished");
     console.log("Build finished successfully");
 }
 
