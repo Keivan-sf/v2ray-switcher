@@ -1,12 +1,13 @@
 import { ConfigExtractor } from "../SubscriptionServerExtractor";
 import { MainPort } from "./MainPort";
 import { ServerTester } from "./ServerTester";
+import { getRootDir } from "../../utils/dirname";
 
 export class Switcher {
     private main_port: MainPort;
     private ready_testers: ServerTester[] = [];
     private connected_testers: ServerTester[] = [];
-
+    private v2ray_executable = getRootDir() + "/v2ray-core/v2ray";
     constructor(public extractor: ConfigExtractor) {
         const socks_creds =
             process.env.SOCKS_USER && process.env.SOCKS_PASS
@@ -17,7 +18,7 @@ export class Switcher {
                 : undefined;
 
         this.main_port = new MainPort(
-            __dirname + "/v2ray-core/v2ray",
+            this.v2ray_executable, 
             4080,
             4081,
             socks_creds
@@ -25,7 +26,7 @@ export class Switcher {
 
         for (let i = 4075; i < 4080; i++) {
             this.ready_testers.push(
-                new ServerTester(__dirname + "/v2ray-core/v2ray", i, this)
+                new ServerTester(this.v2ray_executable, i, this)
             );
         }
     }
