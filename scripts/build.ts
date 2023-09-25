@@ -15,7 +15,7 @@ const DOWNLOAD_LINKS: { [k in string]: string } = {
 };
 
 function generateEssentialDirectories() {
-    const configs_dir = path.join(__dirname, "..", "src/lib/Files/.configs");
+    const configs_dir = path.join(__dirname, "..", ".configs");
     const subscription_file = path.join(__dirname, "..", "subscriptions.txt");
     const servers_file = path.join(__dirname, "..", "servers.txt");
     if (!fs.existsSync(configs_dir)) fs.mkdirSync(configs_dir);
