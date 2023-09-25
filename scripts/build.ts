@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import os from "os";
 import axios from "axios";
 import shelljs from "shelljs";
@@ -13,16 +11,6 @@ const DOWNLOAD_LINKS: { [k in string]: string } = {
     "Windows_NT-x64":
         "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-windows-64.zip",
 };
-
-function generateEssentialDirectories() {
-    const configs_dir = path.join(__dirname, "..", ".configs");
-    const subscription_file = path.join(__dirname, "..", "subscriptions.txt");
-    const servers_file = path.join(__dirname, "..", "servers.txt");
-    if (!fs.existsSync(configs_dir)) fs.mkdirSync(configs_dir);
-    if (!fs.existsSync(subscription_file))
-        fs.writeFileSync(subscription_file, "");
-    if (!fs.existsSync(servers_file)) fs.writeFileSync(servers_file, "");
-}
 
 async function installV2rayBinaries() {
     const download_url = DOWNLOAD_LINKS[os.type() + "-" + os.arch()];
@@ -42,9 +30,6 @@ async function installV2rayBinaries() {
 }
 
 async function start() {
-    console.log("Generating essential files and directories...");
-    generateEssentialDirectories();
-    console.log("Finished");
     console.log("Installing v2ray binaries...");
     await installV2rayBinaries();
     console.log("Finished");
