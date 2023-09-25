@@ -8,6 +8,10 @@ import AdmZip from "adm-zip";
 const DOWNLOAD_LINKS: { [k in string]: string } = {
     "Linux-x64":
         "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-linux-64.zip",
+    "Darwin-x64":
+        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-macos-64.zip",
+    "Windows_NT-x64":
+        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-windows-64.zip",
 };
 
 function generateEssentialDirectories() {
