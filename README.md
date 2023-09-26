@@ -14,6 +14,16 @@ A simple app to get v2ray servers from a list of subscriptions, and always expos
 
 A socks5 proxy will be exposed at `4080` once a good connection is established
 
+
+## Setup password for socks5 proxy
+
+In order to have authentication for your proxy, you can set the following environment variables: 
+```
+SOCKS_USER=
+SOCKS_PASS=
+```
+> Note that you must set both 
+
 ## Supported formats
 
 -   Vmess
