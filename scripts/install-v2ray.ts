@@ -33,7 +33,6 @@ async function start() {
     console.log("Installing v2ray binaries...");
     await installV2rayBinaries();
     console.log("Finished");
-    console.log("Build finished successfully");
 }
 
 start();
