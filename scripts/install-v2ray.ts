@@ -1,4 +1,5 @@
 import os from "os";
+import path from "path";
 import axios from "axios";
 import shelljs from "shelljs";
 import AdmZip from "adm-zip";
@@ -20,7 +21,7 @@ function getTarget() {
     return target;
 }
 
-async function installV2rayBinaries(download_url: string) {
+async function installV2rayBinaries(download_url: string, outdir: string) {
     const v2ray_zip_buffer: Buffer = (
         await axios({
             url: download_url,
@@ -28,8 +29,8 @@ async function installV2rayBinaries(download_url: string) {
         })
     ).data;
     const zip = new AdmZip(v2ray_zip_buffer);
-    zip.extractAllTo("./src/v2ray-core", true);
-    shelljs.chmod("+x", "./src/v2ray-core/v2ray");
+    zip.extractAllTo(path.resolve(outdir, "v2ray-core"), true);
+    shelljs.chmod("+x", path.resolve(outdir , "v2ray-core/v2ray"));
 }
 
 async function start() {
@@ -40,7 +41,7 @@ async function start() {
         process.exit(0);
     }
     console.log("installing v2ray binaries for:", target);
-    await installV2rayBinaries(download_url);
+    await installV2rayBinaries(download_url, args.outdir);
     console.log("Finished");
 }
 
