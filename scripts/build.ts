@@ -25,8 +25,8 @@ async function installV2rayBinaries() {
         })
     ).data;
     const zip = new AdmZip(v2ray_zip_buffer);
-    zip.extractAllTo("./v2ray-core", true);
-    shelljs.chmod("+x", "./v2ray-core/v2ray");
+    zip.extractAllTo("./src/v2ray-core", true);
+    shelljs.chmod("+x", "./src/v2ray-core/v2ray");
 }
 
 async function start() {
