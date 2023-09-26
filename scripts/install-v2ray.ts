@@ -4,20 +4,23 @@ import shelljs from "shelljs";
 import AdmZip from "adm-zip";
 
 const DOWNLOAD_LINKS: { [k in string]: string } = {
-    "Linux-x64":
+    "linux-x64":
         "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-linux-64.zip",
-    "Darwin-x64":
+    "darwin-x64":
         "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-macos-64.zip",
-    "Windows_NT-x64":
+    "windows_nt-x64":
         "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-windows-64.zip",
 };
 
-async function installV2rayBinaries() {
-    const download_url = DOWNLOAD_LINKS[os.type() + "-" + os.arch()];
-    if (!download_url) {
-        console.log("os and arch not supported: ", os.type() + "-" + os.arch());
-        process.exit(0);
-    }
+function getTarget() {
+    const forced_target = process.argv.find((a) => a.startsWith("--target="));
+    const target = forced_target
+        ? forced_target.split("--target=")[1]
+        : os.type() + "-" + os.arch();
+    return target;
+}
+
+async function installV2rayBinaries(download_url: string) {
     const v2ray_zip_buffer: Buffer = (
         await axios({
             url: download_url,
@@ -30,8 +33,14 @@ async function installV2rayBinaries() {
 }
 
 async function start() {
-    console.log("Installing v2ray binaries...");
-    await installV2rayBinaries();
+    const target = getTarget();
+    const download_url = DOWNLOAD_LINKS[target.toLowerCase()];
+    if (!download_url) {
+        console.log("os and arch not supported:", target);
+        process.exit(0);
+    }
+    console.log("installing v2ray binaries for:", target);
+    await installV2rayBinaries(download_url);
     console.log("Finished");
 }
 
