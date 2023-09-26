@@ -22,7 +22,7 @@ In order to have authentication for your proxy, you can set the following enviro
 SOCKS_USER=
 SOCKS_PASS=
 ```
-> Note that you must set both 
+> Note that you must set both or neither 
 
 ## Supported formats
 
