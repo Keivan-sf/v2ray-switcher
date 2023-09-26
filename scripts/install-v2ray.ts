@@ -2,6 +2,8 @@ import os from "os";
 import axios from "axios";
 import shelljs from "shelljs";
 import AdmZip from "adm-zip";
+import minimist from "minimist";
+const args = minimist(process.argv.slice(2));
 
 const DOWNLOAD_LINKS: { [k in string]: string } = {
     "linux-x64":
@@ -13,10 +15,8 @@ const DOWNLOAD_LINKS: { [k in string]: string } = {
 };
 
 function getTarget() {
-    const forced_target = process.argv.find((a) => a.startsWith("--target="));
-    const target = forced_target
-        ? forced_target.split("--target=")[1]
-        : os.type() + "-" + os.arch();
+    const forced_target = args.target;
+    const target = forced_target ?? os.type() + "-" + os.arch();
     return target;
 }
 
