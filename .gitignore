@@ -1,6 +1,8 @@
 .env
 node_modules
 .dist
+.build
+.cache
 subscriptions.txt
 servers.txt
 .configs

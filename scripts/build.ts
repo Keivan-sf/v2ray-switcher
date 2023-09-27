@@ -1,39 +1,24 @@
-import os from "os";
-import axios from "axios";
-import shelljs from "shelljs";
-import AdmZip from "adm-zip";
+import fs from "fs";
+import * as child_process from "child_process";
 
-const DOWNLOAD_LINKS: { [k in string]: string } = {
-    "Linux-x64":
-        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-linux-64.zip",
-    "Darwin-x64":
-        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-macos-64.zip",
-    "Windows_NT-x64":
-        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-windows-64.zip",
-};
+fs.rmSync(".dist", { recursive: true, force: true });
+fs.rmSync(".build", { recursive: true, force: true });
 
-async function installV2rayBinaries() {
-    const download_url = DOWNLOAD_LINKS[os.type() + "-" + os.arch()];
-    if (!download_url) {
-        console.log("os and arch not supported: ", os.type() + "-" + os.arch());
-        process.exit(0);
-    }
-    const v2ray_zip_buffer: Buffer = (
-        await axios({
-            url: download_url,
-            responseType: "arraybuffer",
-        })
-    ).data;
-    const zip = new AdmZip(v2ray_zip_buffer);
-    zip.extractAllTo("./v2ray-core", true);
-    shelljs.chmod("+x", "./v2ray-core/v2ray");
+function executeCmd(cmd: string) {
+    const cmd_splitted = cmd.split(" ");
+    const command =cmd_splitted[0] 
+    const args =cmd_splitted.splice(1) 
+    const output = child_process.spawnSync(command, args).output.toString();
+    console.log(output);
+    if (output.toLowerCase().includes("error")) throw new Error("Process exited with error");
 }
 
-async function start() {
-    console.log("Installing v2ray binaries...");
-    await installV2rayBinaries();
-    console.log("Finished");
-    console.log("Build finished successfully");
-}
+executeCmd("npx tsc")
+executeCmd("npx ncc build .dist/index.js -o .build")
+executeCmd("npx ncc build .dist/index.js -o .build")
+executeCmd("npx pkg .build/index.js -t node18-linux-x64,node18-macos-x64,node18-win-x64 --out-path .build")
 
-start();
+fs.rmSync(".dist", { recursive: true, force: true });
+fs.rmSync(".build/index.js", { recursive: true, force: true });
+
+console.log('Build finished successfully')

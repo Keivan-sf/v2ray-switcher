@@ -5,10 +5,13 @@ import { setRootDir } from "./utils/dirname";
 import path from "path";
 import fs from "fs";
 
+const cwd = process.argv.some(arg => arg.includes("ts-node")) ? __dirname : process.cwd();
+
+const configs_dir = path.join(cwd, ".configs");
+const subscription_file = path.join(cwd, "subscriptions.txt");
+const servers_file = path.join(cwd, "servers.txt");
+
 function generateEssentialDirectories() {
-    const configs_dir = path.join(__dirname, "..", ".configs");
-    const subscription_file = path.join(__dirname, "..", "subscriptions.txt");
-    const servers_file = path.join(__dirname, "..", "servers.txt");
     if (!fs.existsSync(configs_dir)) fs.mkdirSync(configs_dir);
     if (!fs.existsSync(subscription_file))
         fs.writeFileSync(subscription_file, "");
@@ -16,10 +19,10 @@ function generateEssentialDirectories() {
 }
 
 async function start() {
-    setRootDir(path.resolve(__dirname, ".."));
+    setRootDir(path.resolve(cwd));
     generateEssentialDirectories();
     const files = new Files();
-    const sub_links = await files.getSubscriptionLinks("./subscriptions.txt");
+    const sub_links = await files.getSubscriptionLinks(subscription_file);
     const extractor = new ConfigExtractor(sub_links, 30 * 60 * 1000);
     await extractor.startExtracting();
     const switcher = new Switcher(extractor);
