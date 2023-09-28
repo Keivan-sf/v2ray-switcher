@@ -24,11 +24,13 @@ function getTarget() {
     return target;
 }
 
-async function installV2rayBinaries(download_url: string, outdir: string) {
+async function installV2rayBinaries(target: string, outdir: string) {
+    const download_url = DOWNLOAD_LINKS[target.toLowerCase()];
     const file_name = download_url.split("/").at(-1);
     let v2ray_zip_buffer: Buffer;
+
     if (!fs.existsSync(`.cache/${file_name}`)) {
-        console.log("Cache not found, downloading")
+        console.log("Cache not found, downloading");
         v2ray_zip_buffer = (
             await axios({
                 url: download_url,
@@ -37,12 +39,18 @@ async function installV2rayBinaries(download_url: string, outdir: string) {
         ).data;
         fs.writeFileSync(`.cache/${file_name}`, v2ray_zip_buffer);
     } else {
-        console.log("Using cached version")
+        console.log("Using cached version");
         v2ray_zip_buffer = fs.readFileSync(`.cache/${file_name}`);
     }
+
     const zip = new AdmZip(v2ray_zip_buffer);
     zip.extractAllTo(path.join(outdir, "v2ray-core"), true);
-    shelljs.chmod("+x", path.join(outdir, "v2ray-core/v2ray"));
+
+    if (target.startsWith("windows")) {
+        shelljs.chmod("+x", path.join(outdir, "v2ray-core/v2ray.exe"));
+    } else {
+        shelljs.chmod("+x", path.join(outdir, "v2ray-core/v2ray"));
+    }
 }
 
 async function start() {
@@ -53,7 +61,7 @@ async function start() {
         process.exit(0);
     }
     console.log("installing v2ray binaries for:", target);
-    await installV2rayBinaries(download_url, args.outdir);
+    await installV2rayBinaries(target, args.outdir);
     console.log("Finished");
 }
 
