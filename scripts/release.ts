@@ -10,7 +10,7 @@ if (!args.v) {
     process.exit(0);
 }
 
-const dir = `.build/release/${args.v}`;
+const dir = `.build/release/v${args.v}`;
 
 if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
 
