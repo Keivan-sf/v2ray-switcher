@@ -20,7 +20,7 @@ const directories = {
     "linux-x64": path.join(dir, `v2switcher-v${args.v}-linux-x64`),
     "windows-x64": path.join(dir, `v2switcher-v${args.v}-windows-x64`),
     "macos-x64": path.join(dir, `v2switcher-v${args.v}-macos-x64`),
-};
+} as const;
 
 for (const dir of Object.values(directories)) fs.mkdirSync(dir);
 
