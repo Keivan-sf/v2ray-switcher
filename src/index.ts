@@ -11,7 +11,6 @@ const cwd = process.argv.some((arg) => arg.includes("ts-node"))
 
 const configs_dir = path.join(cwd, ".configs");
 const config_file = path.join(cwd, "config.json");
-const servers_file = path.join(cwd, "servers.txt");
 
 function generateEssentialFileAndDirectories() {
     if (!fs.existsSync(configs_dir)) fs.mkdirSync(configs_dir);
@@ -19,7 +18,6 @@ function generateEssentialFileAndDirectories() {
         console.log("config.json file was not found");
         process.exit(0);
     }
-    if (!fs.existsSync(servers_file)) fs.writeFileSync(servers_file, "");
 }
 
 async function start() {
