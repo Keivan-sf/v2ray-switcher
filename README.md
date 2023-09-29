@@ -1,6 +1,6 @@
 # v2ray-switcher
 
-A simple app automatically switch between v2ray servers and always expose a reliable socks5 proxy
+A simple app to automatically switch between v2ray servers and always expose a reliable socks5 proxy
 
 
 ## To use:
@@ -13,7 +13,7 @@ Clone the repository `git clone https://github.com/Keivan-sf/v2ray-switcher.git`
 ```js
 {
     "subscription_urls": [
-	    "https://yoursubscription-url.example"
+        "https://yoursubscription-url.example"
     ],
     "servers": [
         "vmess://example_config_uri"
