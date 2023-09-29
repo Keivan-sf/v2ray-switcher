@@ -10,7 +10,7 @@ Clone the repository `git clone https://github.com/Keivan-sf/v2ray-switcher.git`
 1.  Run `npm i && npm run dev:prepare`
 2.  configure your `config.json` file located at `./src` like below
 
-```
+```js
 {
     "subscription_urls": [
 	    "https://yoursubscription-url.example"
