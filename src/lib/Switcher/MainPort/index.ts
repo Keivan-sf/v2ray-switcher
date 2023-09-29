@@ -100,7 +100,7 @@ export class MainPort {
         private core_file_path: string,
         public socks5_port: number,
         public http_port: number,
-        socks_credintials?: { user: string; password: string }
+        socks_credintials?: { username: string; password: string }
     ) {
         this.config.inbounds[0].port = socks5_port;
         this.config.inbounds[1].port = http_port;
@@ -108,7 +108,7 @@ export class MainPort {
             this.config.inbounds[0].settings!.auth = "password";
             this.config.inbounds[0].settings!.accounts = [
                 {
-                    user: socks_credintials.user,
+                    user: socks_credintials.username,
                     pass: socks_credintials.password,
                 },
             ];

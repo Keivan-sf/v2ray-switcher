@@ -8,17 +8,12 @@ export class Switcher {
     private ready_testers: ServerTester[] = [];
     private connected_testers: ServerTester[] = [];
     private v2ray_executable = getRootDir() + "/v2ray-core/v2ray";
-    constructor(public extractor: ConfigExtractor) {
-        const socks_creds =
-            process.env.SOCKS_USER && process.env.SOCKS_PASS
-                ? {
-                      user: process.env.SOCKS_USER,
-                      password: process.env.SOCKS_PASS,
-                  }
-                : undefined;
-
+    constructor(
+        public extractor: ConfigExtractor,
+        socks_creds?: { username: string; password: string },
+    ) {
         this.main_port = new MainPort(
-            this.v2ray_executable, 
+            this.v2ray_executable,
             4080,
             4081,
             socks_creds

@@ -1,31 +1,31 @@
 import { V2rayJsonConfig } from "../interfaces";
-import { Subscription } from "./Subscription";
-import { getRootDir } from "../../utils/dirname";
+import { URIExtractor } from "./URIExtractor";
+import { parseURIs } from "./URIParser";
 
 export class ConfigExtractor {
     private configs: V2rayJsonConfig[] = [];
+    private uriExtractor: URIExtractor = new URIExtractor();
     private first_run: boolean = true;
     constructor(
         private sub_links: string[],
+        private extra_uris: string[],
         private delay: number
     ) {}
+
     public async startExtracting() {
         console.log("Updating subscriptions...");
         const promises = [];
         for (const link of this.sub_links) {
-            promises.push(new Subscription(link, "url").getJsonConfigs());
+            promises.push(this.uriExtractor.extractURIsFromSubLink(link));
         }
-        promises.push(
-            new Subscription(
-                getRootDir() + "/servers.txt",
-                "file_path"
-            ).getJsonConfigs()
-        );
-        const subscriptions_configs = await Promise.all(promises);
-        const configs = [];
-        for (const sub_config of subscriptions_configs) {
-            configs.push(...sub_config);
-        }
+        const raw_uris = (await Promise.all(promises)).reduce((acc, l) => {
+            acc.push(...l);
+            return acc;
+        }, []);
+        raw_uris.push(...this.extra_uris);
+        const parsed_uris = parseURIs(raw_uris);
+        const configs = parsed_uris.map(u => u.convertToJson());
+        
         if (configs.length === 0) {
             const err_msg =
                 "No supported servers found in subscription results or servers.txt!\nPlease make sure you've filled `subscription.txt` and `servers.txt` with correct values";
@@ -39,8 +39,9 @@ export class ConfigExtractor {
         }
         setTimeout(() => this.startExtracting, this.delay);
     }
-    public get() {
-        const server = this.configs.shift() as V2rayJsonConfig;
+
+    public get():V2rayJsonConfig {
+        const server = this.configs.shift()!;
         this.configs.push(server);
         return server;
     }
