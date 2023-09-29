@@ -43,6 +43,7 @@
         "query-string": "7.1.3",
         "shelljs": "^0.8.5",
         "socks-proxy-agent": "^8.0.1",
-        "tree-kill": "^1.2.2"
+        "tree-kill": "^1.2.2",
+        "zod": "^3.22.2"
     }
 }
