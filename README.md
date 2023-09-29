@@ -27,7 +27,7 @@ A socks5 proxy will be exposed at `4080` once a good connection is established
 
 ## Setup password for socks5 proxy
 
-In order to have authentication for your proxy, you can add the following properties to yor `config.json`:
+In order to have authentication for your proxy, you can add the following properties to your `config.json`:
 ```js
 {
     // ...rest of the config
