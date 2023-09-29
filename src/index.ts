@@ -29,7 +29,7 @@ async function start() {
     const sub_links = config.subscription_urls;
     const extractor = new ConfigExtractor(sub_links,config.servers, 30 * 60 * 1000);
     await extractor.startExtracting();
-    const switcher = new Switcher(extractor);
+    const switcher = new Switcher(extractor, config.auth);
     switcher.start();
     console.log("\nThe process is started, connect to port 4080\n");
 }
