@@ -27,7 +27,7 @@ async function start() {
     generateEssentialFileAndDirectories();
     const config = await parseConfig(path.join(getRootDir(), "config.json"));
     const sub_links = config.subscription_urls;
-    const extractor = new ConfigExtractor(sub_links, 30 * 60 * 1000);
+    const extractor = new ConfigExtractor(sub_links,config.servers, 30 * 60 * 1000);
     await extractor.startExtracting();
     const switcher = new Switcher(extractor);
     switcher.start();

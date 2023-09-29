@@ -1,4 +1,4 @@
-import { ConfigURI, V2rayJsonConfig } from "../../../../../interfaces";
+import { ConfigURI, V2rayJsonConfig } from "../../../../interfaces";
 import querystring from "query-string";
 
 const sample_config: V2rayJsonConfig = {
