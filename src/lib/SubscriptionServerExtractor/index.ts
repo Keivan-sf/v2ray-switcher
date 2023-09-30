@@ -1,3 +1,4 @@
+import { exitWithError, warn } from "../../utils/errorHandler";
 import { V2rayJsonConfig } from "../interfaces";
 import { URIExtractor } from "./URIExtractor";
 import { parseURIs } from "./URIParser";
@@ -29,8 +30,8 @@ export class ConfigExtractor {
         if (configs.length === 0) {
             const err_msg =
                 "No supported servers were found in subscription results or servers!";
-            if (this.first_run) throw new Error(err_msg);
-            console.log(err_msg + "\n Using previous configurations");
+            if (this.first_run) exitWithError(err_msg);
+            warn(err_msg + "\n Using previous configurations");
             return;
         }
         const length = this.configs.unshift(...configs);

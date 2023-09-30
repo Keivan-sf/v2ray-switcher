@@ -4,6 +4,7 @@ import { getRootDir, setRootDir } from "./utils/dirname";
 import { parseConfig } from "./lib/ConfigParser";
 import path from "path";
 import fs from "fs";
+import { exitWithError } from "./utils/errorHandler";
 
 const cwd = process.argv.some((arg) => arg.includes("ts-node"))
     ? __dirname
@@ -15,8 +16,7 @@ const config_file = path.join(cwd, "config.json");
 function generateEssentialFileAndDirectories() {
     if (!fs.existsSync(configs_dir)) fs.mkdirSync(configs_dir);
     if (!fs.existsSync(config_file)) {
-        console.log("config.json file was not found");
-        process.exit(0);
+        exitWithError("config.json file was not found")
     }
 }
 
