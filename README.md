@@ -3,12 +3,11 @@
 A simple app to automatically switch between v2ray servers and always expose a reliable socks5 proxy
 
 
-## To use:
+### To use:
 
-Clone the repository `git clone https://github.com/Keivan-sf/v2ray-switcher.git`
+Grab the latest version from [Release page](https://github.com/Keivan-sf/v2ray-switcher/releases) and extract it
 
-1.  Run `npm i && npm run dev:prepare`
-2.  configure your `config.json` file located at `./src` like below
+1.  Configure your `config.json` like below
 
 ```js
 {
@@ -20,12 +19,20 @@ Clone the repository `git clone https://github.com/Keivan-sf/v2ray-switcher.git`
     ]
 }
 ```
+2. Run `v2ray-switcher`
 
+**A socks5 proxy will be exposed at `4080` once a good connection is established**
+
+### To use from source:
+Clone the repository `git clone https://github.com/Keivan-sf/v2ray-switcher.git`
+
+1.  Run `npm i && npm run dev:prepare`
+2.  configure your `config.json` file located at `./src` 
 3.  Run `npm start`
 
 A socks5 proxy will be exposed at `4080` once a good connection is established
 
-## Setup password for socks5 proxy
+### Setup username and password for your socks5 proxy
 
 In order to have authentication for your proxy, you can add the following properties to your `config.json`:
 ```js
@@ -41,7 +48,7 @@ In order to have authentication for your proxy, you can add the following proper
 
 > Note that you must set both or neither
 
-## Supported formats
+### Supported formats
 
 -   Vmess
 -   Vless
