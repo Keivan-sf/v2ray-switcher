@@ -28,7 +28,7 @@ export class ConfigExtractor {
         
         if (configs.length === 0) {
             const err_msg =
-                "No supported servers found in subscription results or servers.txt!\nPlease make sure you've filled `subscription.txt` and `servers.txt` with correct values";
+                "No supported servers were found in subscription results or servers!";
             if (this.first_run) throw new Error(err_msg);
             console.log(err_msg + "\n Using previous configurations");
             return;
