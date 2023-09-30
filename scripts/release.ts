@@ -4,6 +4,10 @@ import path from "path";
 import AdmZip from "adm-zip";
 import { executeCmd } from "./lib";
 const args = minimist(process.argv);
+const default_config = {
+    subscription_urls: [],
+    servers: [],
+};
 
 if (!args.v) {
     console.log("-v must be specified for the version");
@@ -22,6 +26,8 @@ const directories = {
     "macos-x64": path.join(dir, `v2switcher-v${args.v}-macos-x64`),
 } as const;
 
+
+// Creating release target folders
 for (const dir of Object.values(directories)) fs.mkdirSync(dir);
 
 fs.copyFileSync(
@@ -39,6 +45,17 @@ fs.copyFileSync(
     path.join(directories["windows-x64"], "v2ray-switcher.exe")
 );
 
+
+// Creating empty config.json files for each release target 
+for (const dir of Object.values(directories)) {
+    fs.writeFileSync(
+        path.join(dir, "config.json"),
+        JSON.stringify(default_config, null, 4)
+    );
+}
+
+
+// Downloading v2ray binaries for all targets 
 executeCmd(
     `npx ts-node scripts/install-v2ray.ts --target darwin-x64 --outdir ${directories["macos-x64"]}`
 );
@@ -48,4 +65,3 @@ executeCmd(
 executeCmd(
     `npx ts-node scripts/install-v2ray.ts --target windows_nt-x64 --outdir ${directories["windows-x64"]}`
 );
-
