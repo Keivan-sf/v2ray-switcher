@@ -1,6 +1,7 @@
 import * as z from "zod";
 import fs from "fs/promises";
 import { ZodError } from "zod";
+import { exitWithError } from "../../utils/errorHandler";
 const configSchema = z.object({
     subscription_urls: z.array(z.string()).default([]),
     servers: z.array(z.string()).default([]),
@@ -22,10 +23,9 @@ export const parseConfig = async (file_path: string): Promise<ConfigSchema> => {
             parsed.servers.length === 0 &&
             parsed.subscription_urls.length === 0
         ) {
-            console.log(
+            exitWithError(
                 "There are no servers nor subscription URIs in `config.json`"
             );
-            process.exit(0);
         }
         return parsed;
     } catch (err: any) {
@@ -34,9 +34,10 @@ export const parseConfig = async (file_path: string): Promise<ConfigSchema> => {
             const message = error.errors
                 .map((e) => e.path.join(" > ") + ": " + e.message)
                 .join("\n");
-            console.log("There are erros in your configuration file:");
-            console.log(message);
-            process.exit(0);
+            exitWithError(
+                "There are erros in your configuration file:\n" + message
+            );
+            return {} as any; 
         } else {
             throw err;
         }

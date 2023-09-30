@@ -143,7 +143,7 @@ export class MainPort {
             cmd.stdout.on("data", async (data: Buffer) => {
                 const out = data.toString();
                 if (!out.includes("started")) return;
-                console.log("Main port is now pointing to:", this.current_port);
+                console.log("Main port is now available");
                 resolve();
             });
         });
