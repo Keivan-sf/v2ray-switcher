@@ -3,7 +3,7 @@
 A simple app to automatically switch between v2ray servers and always expose a reliable socks5 proxy
 
 
-### To use:
+## To use:
 
 Grab the latest version from [Release page](https://github.com/Keivan-sf/v2ray-switcher/releases) and extract it
 
@@ -23,7 +23,7 @@ Grab the latest version from [Release page](https://github.com/Keivan-sf/v2ray-s
 
 **A socks5 proxy will be exposed at `4080` once a good connection is established**
 
-### To use from source:
+## To use from source:
 Clone the repository `git clone https://github.com/Keivan-sf/v2ray-switcher.git`
 
 1.  Run `npm i && npm run dev:prepare`
