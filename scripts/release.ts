@@ -32,7 +32,7 @@ async function release() {
 
     fs.copyFileSync(
         ".build/index-linux",
-        path.join(directories["linux-x64"], "v2ray-swithcer")
+        path.join(directories["linux-x64"], "v2ray-switcher")
     );
 
     fs.copyFileSync(
