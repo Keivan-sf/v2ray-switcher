@@ -18,7 +18,13 @@ export class ServerTester {
     public async run(config: V2rayJsonConfig) {
         this.setPortToConfig(config);
         const cmd = await this.createV2rayProcess(config);
-        await this.waitForV2rayToStart(cmd);
+        try {
+            await this.waitForV2rayToStart(cmd);
+        } catch (err) {
+            this.handleStatusChange("disconnected");
+            warn(err);
+            return;
+        }
         await this.startTesting(cmd.pid);
     }
 
@@ -32,12 +38,25 @@ export class ServerTester {
     }
 
     private waitForV2rayToStart = (cmd: $.ChildProcessWithoutNullStreams) =>
-        new Promise<void>((resolve) => {
+        new Promise<void>((resolve, reject) => {
+            let is_fulfilled = false;
+
+            setTimeout(() => {
+                cmd.kill();
+                if (is_fulfilled) reject("v2ray process timed out");
+            }, 5000);
+
+            cmd.stderr?.on("data", async (data: Buffer) => {
+                const out = data.toString();
+                if (out.includes("Failed to start") && !is_fulfilled)
+                    reject(out);
+            });
+
             cmd.stdout.on("data", async (data: Buffer) => {
                 const out = data.toString();
                 if (!out.includes("started")) return;
                 try {
-                    resolve();
+                    if (!is_fulfilled) resolve();
                 } catch (err) {
                     warn(err);
                 }
@@ -66,15 +85,23 @@ export class ServerTester {
     private async startTesting(pid?: number) {
         const result = await this.test(pid);
         if (result === "FAILED") {
-            this.status = "disconnected";
-            this.switcher.fail(this);
+            this.handleStatusChange("disconnected");
             return;
         }
         if (this.status === "disconnected") {
+            this.handleStatusChange("connected");
+        }
+        setTimeout(() => this.startTesting(pid), 30 * 1000);
+    }
+
+    private async handleStatusChange(status: "connected" | "disconnected") {
+        if (status === "disconnected") {
+            this.status = "disconnected";
+            this.switcher.fail(this);
+        } else if (this.status === "disconnected") {
             this.status = "connected";
             this.switcher.success(this);
         }
-        setTimeout(() => this.startTesting(pid), 30 * 1000);
     }
 
     private async test(pid?: number): Promise<"SUCCEED" | "FAILED"> {
