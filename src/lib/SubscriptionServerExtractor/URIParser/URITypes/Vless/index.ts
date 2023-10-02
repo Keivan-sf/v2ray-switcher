@@ -154,11 +154,13 @@ export class VlessURI implements ConfigURI {
         path?: string;
         security?: string;
     } {
-        const without_protocol = this.uri.split("vless://")[1];
-        const secret = without_protocol.split("@")[0];
-        const host = without_protocol.split("@")[1].split(":")[0];
-        const port = Number(without_protocol.split(":")[1].split("?")[0]);
-        const queries = querystring.parse(without_protocol.split("?")[1]);
+        const wo_protocol_and_name = this.uri
+            .split("vless://")[1]
+            .split("#")[0];
+        const secret = wo_protocol_and_name.split("@")[0];
+        const host = wo_protocol_and_name.split("@")[1].split(":")[0];
+        const port = Number(wo_protocol_and_name.split(":")[1].split("?")[0]);
+        const queries = querystring.parse(wo_protocol_and_name.split("?")[1]);
         const type = queries.type as string;
         const path = queries.path as string;
         const security = queries.security as string;
