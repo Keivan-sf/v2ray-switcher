@@ -10,22 +10,23 @@ import { warn } from "../../../utils/errorHandler";
 export class ServerTester {
     private files: Files = new Files();
     private status: "connected" | "disconnected" = "disconnected";
+    private process: $.ChildProcess | null = null;
     constructor(
-        public core_file_path: string, // /v2ray-core/v2ray
+        public core_file_path: string,
         public port: number,
         private switcher: Switcher
     ) {}
     public async run(config: V2rayJsonConfig) {
         this.setPortToConfig(config);
-        const cmd = await this.createV2rayProcess(config);
+        this.process = await this.createV2rayProcess(config);
         try {
-            await this.waitForV2rayToStart(cmd);
+            await this.waitForV2rayToStart();
         } catch (err) {
             this.handleStatusChange("disconnected");
             warn(err);
             return;
         }
-        await this.startTesting(cmd.pid);
+        await this.startTesting();
     }
 
     private async createV2rayProcess(config: V2rayJsonConfig) {
@@ -33,26 +34,29 @@ export class ServerTester {
             `${this.port}`,
             config
         );
-        const command = `${this.core_file_path} run --config=${config_path}`;
-        return $.spawn(command, { shell: true });
+        const raw_cmd = `${this.core_file_path} run --config=${config_path}`;
+        const cmd_split = raw_cmd.split(" ");
+        const cmd = cmd_split.shift() as string;
+        return $.spawn(cmd, cmd_split);
     }
 
-    private waitForV2rayToStart = (cmd: $.ChildProcessWithoutNullStreams) =>
+    private waitForV2rayToStart = () =>
         new Promise<void>((resolve, reject) => {
+            if (!this.process) return reject("No process");
             let is_fulfilled = false;
 
             setTimeout(() => {
-                cmd.kill();
+                this.process?.kill();
                 if (is_fulfilled) reject("v2ray process timed out");
             }, 5000);
 
-            cmd.stderr?.on("data", async (data: Buffer) => {
+            this.process.stderr?.on("data", async (data: Buffer) => {
                 const out = data.toString();
                 if (out.includes("Failed to start") && !is_fulfilled)
                     reject(out);
             });
 
-            cmd.stdout.on("data", async (data: Buffer) => {
+            this.process.stdout?.on("data", async (data: Buffer) => {
                 const out = data.toString();
                 if (!out.includes("started")) return;
                 try {
@@ -82,8 +86,8 @@ export class ServerTester {
         ];
     }
 
-    private async startTesting(pid?: number) {
-        const result = await this.test(pid);
+    private async startTesting() {
+        const result = await this.test();
         if (result === "FAILED") {
             this.handleStatusChange("disconnected");
             return;
@@ -91,12 +95,16 @@ export class ServerTester {
         if (this.status === "disconnected") {
             this.handleStatusChange("connected");
         }
-        setTimeout(() => this.startTesting(pid), 30 * 1000);
+        setTimeout(() => this.startTesting(), 30 * 1000);
     }
 
     private async handleStatusChange(status: "connected" | "disconnected") {
         if (status === "disconnected") {
             this.status = "disconnected";
+            try {
+                this.process?.kill();
+                if (this.process?.pid) treeKill(this.process.pid);
+            } catch (err) {}
             this.switcher.fail(this);
         } else if (this.status === "disconnected") {
             this.status = "connected";
@@ -104,7 +112,7 @@ export class ServerTester {
         }
     }
 
-    private async test(pid?: number): Promise<"SUCCEED" | "FAILED"> {
+    private async test(): Promise<"SUCCEED" | "FAILED"> {
         try {
             const PROXY = `socks5://localhost:${this.port}`;
             const httpsAgent = new SocksProxyAgent(PROXY);
@@ -116,7 +124,6 @@ export class ServerTester {
             await client.get("/");
             return "SUCCEED";
         } catch (err) {
-            if (pid) treeKill(pid);
             return "FAILED";
         }
     }
