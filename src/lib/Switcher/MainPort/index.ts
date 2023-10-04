@@ -2,6 +2,7 @@ import treeKill from "tree-kill";
 import { Files } from "../../Files";
 import * as $ from "node:child_process";
 import { V2rayJsonConfig } from "../../interfaces";
+import { log } from "../../../utils/logger";
 
 const socks5_config: V2rayJsonConfig = {
     dns: {
@@ -143,7 +144,7 @@ export class MainPort {
             cmd.stdout.on("data", async (data: Buffer) => {
                 const out = data.toString();
                 if (!out.includes("started")) return;
-                console.log("Main port is now available");
+                log.normal("Main port is now available");
                 resolve();
             });
         });

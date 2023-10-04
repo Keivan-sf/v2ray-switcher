@@ -1,10 +1,10 @@
-import { exitWithError, warn } from "../../utils/errorHandler";
+import { exitWithError, log, warn } from "../../utils/logger";
 import { V2rayJsonConfig } from "../interfaces";
 import { URIExtractor } from "./URIExtractor";
 import { parseURIs } from "./URIParser";
 
 export class ConfigExtractor {
-    private configs: V2rayJsonConfig[] = [];
+    private configs: { json: V2rayJsonConfig; uri: string }[] = [];
     private uriExtractor: URIExtractor = new URIExtractor();
     private first_run: boolean = true;
     constructor(
@@ -14,7 +14,7 @@ export class ConfigExtractor {
     ) {}
 
     public async startExtracting() {
-        console.log("Updating subscriptions...");
+        log.normal("Updating subscriptions...");
         const promises = [];
         for (const link of this.sub_links) {
             promises.push(this.uriExtractor.extractURIsFromSubLink(link));
@@ -25,8 +25,11 @@ export class ConfigExtractor {
         }, []);
         raw_uris.push(...this.extra_uris);
         const parsed_uris = parseURIs(raw_uris);
-        const configs = parsed_uris.map(u => u.convertToJson());
-        
+        const configs = parsed_uris.map((u) => ({
+            json: u.convertToJson(),
+            uri: u.uri,
+        }));
+
         if (configs.length === 0) {
             const err_msg =
                 "No supported servers were found in subscription results or servers!";
@@ -41,7 +44,7 @@ export class ConfigExtractor {
         setTimeout(() => this.startExtracting, this.delay);
     }
 
-    public get():V2rayJsonConfig {
+    public get(): { json: V2rayJsonConfig; uri: string } {
         const server = this.configs.shift()!;
         this.configs.push(server);
         return server;

@@ -5,20 +5,22 @@ import * as $ from "node:child_process";
 import { SocksProxyAgent } from "socks-proxy-agent";
 import axios from "axios";
 import { Switcher } from "..";
-import { warn } from "../../../utils/errorHandler";
+import { warn } from "../../../utils/logger";
 
 export class ServerTester {
     private files: Files = new Files();
     private status: "connected" | "disconnected" = "disconnected";
     private process: $.ChildProcess | null = null;
+    public current_config: { json: V2rayJsonConfig; uri: string } | undefined;
     constructor(
         public core_file_path: string,
         public port: number,
         private switcher: Switcher
     ) {}
-    public async run(config: V2rayJsonConfig) {
-        this.setPortToConfig(config);
-        this.process = await this.createV2rayProcess(config);
+    public async run(config: { json: V2rayJsonConfig; uri: string }) {
+        this.current_config = config;
+        this.setPortToConfig(config.json);
+        this.process = await this.createV2rayProcess(config.json);
         try {
             await this.waitForV2rayToStart();
         } catch (err) {
