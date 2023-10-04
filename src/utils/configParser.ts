@@ -1,10 +1,11 @@
 import * as z from "zod";
-import fs from "fs/promises";
+import fs from "fs";
 import { ZodError } from "zod";
 import { exitWithError } from "../../utils/errorHandler";
 const configSchema = z.object({
     subscription_urls: z.array(z.string()).default([]),
     servers: z.array(z.string()).default([]),
+    logLevel: z.number().min(1).max(2).default(1),
     auth: z
         .object({
             username: z.string(),
@@ -12,10 +13,22 @@ const configSchema = z.object({
         })
         .optional(),
 });
+
 type ConfigSchema = z.infer<typeof configSchema>;
 
-export const parseConfig = async (file_path: string): Promise<ConfigSchema> => {
-    const file_content = await fs.readFile(file_path);
+let configurations: ConfigSchema | null = null;
+
+export const getConfig = (): ConfigSchema => {
+    if (!configurations) throw new Error("No configurations has been set");
+    return configurations;
+};
+
+export const setConfig = (config: ConfigSchema) => {
+    configurations = config;
+};
+
+export const parseConfig = (file_path: string): ConfigSchema => {
+    const file_content = fs.readFileSync(file_path);
     const json = JSON.parse(file_content.toString());
     try {
         const parsed = configSchema.parse(json);
@@ -37,7 +50,7 @@ export const parseConfig = async (file_path: string): Promise<ConfigSchema> => {
             exitWithError(
                 "There are erros in your configuration file:\n" + message
             );
-            return {} as any; 
+            return {} as any;
         } else {
             throw err;
         }
