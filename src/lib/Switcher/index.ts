@@ -10,7 +10,7 @@ export class Switcher {
     private v2ray_executable = getRootDir() + "/v2ray-core/v2ray";
     constructor(
         public extractor: ConfigExtractor,
-        socks_creds?: { username: string; password: string },
+        socks_creds?: { username: string; password: string }
     ) {
         this.main_port = new MainPort(
             this.v2ray_executable,
@@ -34,8 +34,8 @@ export class Switcher {
         console.log(
             "Tester failed on port",
             tester.port,
-            "trying another server"
         );
+        console.log(tester.current_config?.uri);
         this.moveFromConnectedToReady(tester);
         tester.run(this.extractor.get());
 
@@ -48,7 +48,7 @@ export class Switcher {
     }
     public success(tester: ServerTester) {
         console.log("Tester succeeded on port", tester.port);
-
+        console.log(tester.current_config?.uri);
         this.moveFromReadyToConnected(tester);
         if (this.main_port.connected) return;
         this.main_port.run(tester.port);

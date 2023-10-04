@@ -114,5 +114,6 @@ export type vmess_uri_config = {
 };
 
 export interface ConfigURI {
+    uri: string;
     convertToJson(): V2rayJsonConfig;
 }
