@@ -4,7 +4,7 @@ import { getRootDir, setRootDir } from "./utils/dirname";
 import { parseConfig, setConfig } from "./utils/configParser";
 import path from "path";
 import fs from "fs";
-import { exitWithError } from "./utils/logger";
+import { exitWithError, log } from "./utils/logger";
 
 const cwd = process.argv.some((arg) => arg.includes("ts-node"))
     ? __dirname
@@ -34,7 +34,7 @@ async function start() {
     await extractor.startExtracting();
     const switcher = new Switcher(extractor, config.auth);
     switcher.start();
-    console.log("\nThe process is started, connect to port 4080\n");
+    log.normal("\nThe process is started, connect to port 4080\n");
 }
 
 start();

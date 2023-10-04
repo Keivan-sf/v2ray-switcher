@@ -1,4 +1,4 @@
-import { exitWithError, warn } from "../../utils/logger";
+import { exitWithError, log, warn } from "../../utils/logger";
 import { V2rayJsonConfig } from "../interfaces";
 import { URIExtractor } from "./URIExtractor";
 import { parseURIs } from "./URIParser";
@@ -14,7 +14,7 @@ export class ConfigExtractor {
     ) {}
 
     public async startExtracting() {
-        console.log("Updating subscriptions...");
+        log.normal("Updating subscriptions...");
         const promises = [];
         for (const link of this.sub_links) {
             promises.push(this.uriExtractor.extractURIsFromSubLink(link));

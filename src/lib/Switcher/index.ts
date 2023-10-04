@@ -2,6 +2,7 @@ import { ConfigExtractor } from "../SubscriptionServerExtractor";
 import { MainPort } from "./MainPort";
 import { ServerTester } from "./ServerTester";
 import { getRootDir } from "../../utils/dirname";
+import { log } from "../../utils/logger";
 
 export class Switcher {
     private main_port: MainPort;
@@ -31,11 +32,11 @@ export class Switcher {
         }
     }
     public fail(tester: ServerTester) {
-        console.log(
+        log.normal(
             "Tester failed on port",
             tester.port,
         );
-        console.log(tester.current_config?.uri);
+        log.verbose(tester.current_config?.uri);
         this.moveFromConnectedToReady(tester);
         tester.run(this.extractor.get());
 
@@ -47,8 +48,8 @@ export class Switcher {
         }
     }
     public success(tester: ServerTester) {
-        console.log("Tester succeeded on port", tester.port);
-        console.log(tester.current_config?.uri);
+        log.normal("Tester succeeded on port", tester.port);
+        log.verbose(tester.current_config?.uri);
         this.moveFromReadyToConnected(tester);
         if (this.main_port.connected) return;
         this.main_port.run(tester.port);
