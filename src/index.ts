@@ -4,7 +4,7 @@ import { getRootDir, setRootDir } from "./utils/dirname";
 import { parseConfig, setConfig } from "./utils/configParser";
 import path from "path";
 import fs from "fs";
-import { exitWithError } from "./utils/errorHandler";
+import { exitWithError } from "./utils/logger";
 
 const cwd = process.argv.some((arg) => arg.includes("ts-node"))
     ? __dirname

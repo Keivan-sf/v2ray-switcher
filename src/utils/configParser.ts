@@ -1,7 +1,7 @@
 import * as z from "zod";
 import fs from "fs";
 import { ZodError } from "zod";
-import { exitWithError } from "../../utils/errorHandler";
+import { exitWithError } from "../utils/logger";
 const configSchema = z.object({
     subscription_urls: z.array(z.string()).default([]),
     servers: z.array(z.string()).default([]),

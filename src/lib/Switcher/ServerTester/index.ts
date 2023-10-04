@@ -5,7 +5,7 @@ import * as $ from "node:child_process";
 import { SocksProxyAgent } from "socks-proxy-agent";
 import axios from "axios";
 import { Switcher } from "..";
-import { warn } from "../../../utils/errorHandler";
+import { warn } from "../../../utils/logger";
 
 export class ServerTester {
     private files: Files = new Files();

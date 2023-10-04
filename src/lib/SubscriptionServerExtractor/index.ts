@@ -1,4 +1,4 @@
-import { exitWithError, warn } from "../../utils/errorHandler";
+import { exitWithError, warn } from "../../utils/logger";
 import { V2rayJsonConfig } from "../interfaces";
 import { URIExtractor } from "./URIExtractor";
 import { parseURIs } from "./URIParser";
