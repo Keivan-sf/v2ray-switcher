@@ -48,6 +48,18 @@ In order to have authentication for your proxy, you can add the following proper
 
 > Note that you must set both or neither
 
+### Log Level
+You can set log level for development purposes
+```js
+{
+    // ...rest of the config
+    "logLevel": 2
+}
+```
+`logLevel` values:
+- `1`: (default) Normal logging 
+- `2`: Verbose logging, includes config URIs when a tester succeeds or fails
+
 ### Supported formats
 
 -   Vmess
