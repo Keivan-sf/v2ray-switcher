@@ -12,10 +12,10 @@ if (!fs.existsSync(".cache")) fs.mkdirSync(".cache");
 const DOWNLOAD_LINKS: { [k in string]: string } = {
     "linux-x64":
         "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-linux-64.zip",
-    "darwin-x64":
-        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-macos-64.zip",
-    "windows_nt-x64":
-        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-windows-64.zip",
+    // "darwin-x64":
+    //     "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-macos-64.zip",
+    // "windows_nt-x64":
+    //     "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-windows-64.zip",
 };
 
 function getTarget() {

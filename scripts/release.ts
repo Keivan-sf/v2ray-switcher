@@ -23,8 +23,8 @@ async function release() {
 
     const directories = {
         "linux-x64": path.join(dir, `v2switcher-v${args.v}-linux-x64`),
-        "windows-x64": path.join(dir, `v2switcher-v${args.v}-windows-x64`),
-        "macos-x64": path.join(dir, `v2switcher-v${args.v}-macos-x64`),
+        // "windows-x64": path.join(dir, `v2switcher-v${args.v}-windows-x64`),
+        // "macos-x64": path.join(dir, `v2switcher-v${args.v}-macos-x64`),
     } as const;
 
     // Creating release target folders
@@ -35,15 +35,15 @@ async function release() {
         path.join(directories["linux-x64"], "v2ray-switcher")
     );
 
-    fs.copyFileSync(
-        ".build/index-macos",
-        path.join(directories["macos-x64"], "v2ray-switcher")
-    );
-
-    fs.copyFileSync(
-        ".build/index-win.exe",
-        path.join(directories["windows-x64"], "v2ray-switcher.exe")
-    );
+    // fs.copyFileSync(
+    //     ".build/index-macos",
+    //     path.join(directories["macos-x64"], "v2ray-switcher")
+    // );
+    //
+    // fs.copyFileSync(
+    //     ".build/index-win.exe",
+    //     path.join(directories["windows-x64"], "v2ray-switcher.exe")
+    // );
 
     // Creating empty config.json files for each release target
     for (const dir of Object.values(directories)) {
@@ -54,15 +54,15 @@ async function release() {
     }
 
     // Downloading v2ray binaries for all targets
-    executeCmd(
-        `npx ts-node scripts/install-v2ray.ts --target darwin-x64 --outdir ${directories["macos-x64"]}`
-    );
+    // executeCmd(
+    //     `npx ts-node scripts/install-v2ray.ts --target darwin-x64 --outdir ${directories["macos-x64"]}`
+    // );
     executeCmd(
         `npx ts-node scripts/install-v2ray.ts --target linux-x64 --outdir ${directories["linux-x64"]}`
     );
-    executeCmd(
-        `npx ts-node scripts/install-v2ray.ts --target windows_nt-x64 --outdir ${directories["windows-x64"]}`
-    );
+    // executeCmd(
+    //     `npx ts-node scripts/install-v2ray.ts --target windows_nt-x64 --outdir ${directories["windows-x64"]}`
+    // );
 
     for (const dir of Object.values(directories)) {
         const archive = archiver("zip");
