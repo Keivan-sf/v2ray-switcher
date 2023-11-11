@@ -8,7 +8,7 @@ export class Switcher {
     private main_port: MainPort;
     private ready_testers: ServerTester[] = [];
     private connected_testers: ServerTester[] = [];
-    private v2ray_executable = getRootDir() + "/v2ray-core/v2ray";
+    private v2ray_executable = getRootDir() + "/xray-core/xray";
     constructor(
         public extractor: ConfigExtractor,
         socks_creds?: { username: string; password: string }
@@ -32,10 +32,7 @@ export class Switcher {
         }
     }
     public fail(tester: ServerTester) {
-        log.normal(
-            "Tester failed on port",
-            tester.port,
-        );
+        log.normal("Tester failed on port", tester.port);
         log.verbose(tester.current_config?.uri);
         this.moveFromConnectedToReady(tester);
         tester.run(this.extractor.get());

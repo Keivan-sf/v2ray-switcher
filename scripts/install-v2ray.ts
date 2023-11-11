@@ -11,11 +11,11 @@ if (!fs.existsSync(".cache")) fs.mkdirSync(".cache");
 
 const DOWNLOAD_LINKS: { [k in string]: string } = {
     "linux-x64":
-        "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-linux-64.zip",
+        "https://github.com/XTLS/Xray-core/releases/download/v1.8.4/Xray-linux-64.zip",
     // "darwin-x64":
-    //     "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-macos-64.zip",
+    //     "https://github.com/XTLS/Xray-core/releases/download/v1.8.4/Xray-macos-64.zip",
     // "windows_nt-x64":
-    //     "https://github.com/v2fly/v2ray-core/releases/download/v5.7.0/v2ray-windows-64.zip",
+    //     "https://github.com/XTLS/Xray-core/releases/download/v1.8.4/Xray-windows-64.zip",
 };
 
 function getTarget() {
@@ -44,12 +44,12 @@ async function installV2rayBinaries(target: string, outdir: string) {
     }
 
     const zip = new AdmZip(v2ray_zip_buffer);
-    zip.extractAllTo(path.join(outdir, "v2ray-core"), true);
+    zip.extractAllTo(path.join(outdir, "xray-core"), true);
 
     if (target.startsWith("windows")) {
-        shelljs.chmod("+x", path.join(outdir, "v2ray-core/v2ray.exe"));
+        shelljs.chmod("+x", path.join(outdir, "xray-core/xray.exe"));
     } else {
-        shelljs.chmod("+x", path.join(outdir, "v2ray-core/v2ray"));
+        shelljs.chmod("+x", path.join(outdir, "xray-core/xray"));
     }
 }
 
@@ -60,7 +60,7 @@ async function start() {
         console.log("os and arch not supported:", target);
         process.exit(0);
     }
-    console.log("installing v2ray binaries for:", target);
+    console.log("installing xray binaries for:", target);
     await installV2rayBinaries(target, args.outdir);
     console.log("Finished");
 }
