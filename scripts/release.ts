@@ -60,6 +60,9 @@ async function release() {
     executeCmd(
         `npx ts-node scripts/install-v2ray.ts --target linux-x64 --outdir ${directories["linux-x64"]}`
     );
+    executeCmd(
+        `npx ts-node scripts/install-xray.ts --target linux-x64 --outdir ${directories["linux-x64"]}`
+    );
     // executeCmd(
     //     `npx ts-node scripts/install-v2ray.ts --target windows_nt-x64 --outdir ${directories["windows-x64"]}`
     // );
