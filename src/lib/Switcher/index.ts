@@ -3,6 +3,7 @@ import { MainPort } from "./MainPort";
 import { ServerTester } from "./ServerTester";
 import { getRootDir } from "../../utils/dirname";
 import { log } from "../../utils/logger";
+import path from "node:path";
 
 export class Switcher {
     private main_port: MainPort;
@@ -14,7 +15,7 @@ export class Switcher {
         socks_creds?: { username: string; password: string }
     ) {
         this.main_port = new MainPort(
-            this.v2ray_executable,
+            path.join(getRootDir(), "v2ray-core", "v2ray"),
             4080,
             4081,
             socks_creds
