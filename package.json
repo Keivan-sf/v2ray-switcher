@@ -8,6 +8,7 @@
         "build": "npx ts-node scripts/build.ts",
         "dev:prepare": "npx shx touch src/config.json && npm run install:v2ray",
         "install:v2ray": "npx ts-node scripts/install-v2ray.ts --outdir=./src",
+        "install:v2parser": "npx ts-node scripts/install-v2parser.ts --outdir=./src",
         "release": "npx ts-node scripts/release.ts",
         "test": "npx jest"
     },
