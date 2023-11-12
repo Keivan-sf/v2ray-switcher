@@ -131,7 +131,6 @@ export class VlessURI implements ConfigURI {
                 queryStrategy: "",
             },
         ];
-        console.log("the config is:", config);
         return config as V2rayJsonConfig;
     }
     exctractInfoFromURI(): {
