@@ -1,5 +1,8 @@
 import { ConfigURI, V2rayJsonConfig } from "../../../../interfaces";
 import querystring from "query-string";
+import { getRootDir } from "../../../../../utils/dirname";
+import path from "path";
+import { execSync } from "child_process";
 
 const sample_config: V2rayJsonConfig = {
     dns: {
@@ -104,12 +107,17 @@ const sample_config: V2rayJsonConfig = {
 };
 
 export class VlessURI implements ConfigURI {
+    private v2parser_exec = path.join(getRootDir(), "v2-uri-parser/v2parser");
     constructor(public uri: string) {}
     convertToJson(): V2rayJsonConfig {
+        const output = execSync(
+            `${this.v2parser_exec} "${this.uri}" --socksport 1080`
+        ).toString();
         const info = this.exctractInfoFromURI();
-        const config = {
+        const config: V2rayJsonConfig = {
             ...sample_config,
         };
+        config.outbounds[0] = JSON.parse(output).outbounds[0];
         config.dns.servers = [
             {
                 address: "https://8.8.8.8/dns-query",
@@ -123,27 +131,7 @@ export class VlessURI implements ConfigURI {
                 queryStrategy: "",
             },
         ];
-        config.outbounds![0] = {
-            domainStrategy: "AsIs",
-            protocol: "vless",
-            settings: {
-                vnext: [
-                    {
-                        address: info.host,
-                        port: info.port,
-                        users: [
-                            {
-                                encryption: "none",
-                                id: info.secret,
-                            },
-                        ],
-                    },
-                ],
-            },
-            streamSettings: { network: info.type, wsSettings: { path: "/" } },
-            tag: "proxy",
-        };
-
+        console.log("the config is:", config);
         return config as V2rayJsonConfig;
     }
     exctractInfoFromURI(): {
