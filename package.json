@@ -6,7 +6,7 @@
     "scripts": {
         "start": "npx ts-node -r dotenv/config src/index.ts",
         "build": "npx ts-node scripts/build.ts",
-        "dev:prepare": "npx shx touch src/config.json && npm run install:v2ray",
+        "dev:prepare": "npx shx touch src/config.json && npm run install:v2ray && npm run install:xray && npm run install:v2parser",
         "install:v2ray": "npx ts-node scripts/install-v2ray.ts --outdir=./src",
         "install:xray": "npx ts-node scripts/install-xray.ts --outdir=./src",
         "install:v2parser": "npx ts-node scripts/install-v2parser.ts --outdir=./src",
